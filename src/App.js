@@ -1,5 +1,6 @@
 import React from 'react'
 import './App.css'
+import axios from 'axios'
 
 export default class App extends React.Component
 {    
@@ -15,28 +16,20 @@ export default class App extends React.Component
         }
     }
 
-    componentDidMount()
+    async componentDidMount()
     {
-        // const readmePath = require('./store/lecture1.md')
-        // console.log(readmePath)
-        // fetch(readmePath)
-        // .then(response => {
-        //     console.log(response)
-        // }).catch((e)=> {
-        //     console.log(e)
-        // })
-        // // .then(text => {
-        // //     this.setState({
-        // //         markdown: marked(text)
-        // //     })
-        // // })
+        await this.handleContent()
 
         this.handleHighlight()
     }
 
-    handleContent()
+    async handleContent()
     {
-
+        let result = await axios.get('https://raw.githubusercontent.com/MihaiBlebea/react-prompt-app/master/store/lecture1.md')
+        this.setState({
+            ...this.state,
+            content: result.data
+        })
     }
 
     handleScroll()
@@ -121,11 +114,19 @@ export default class App extends React.Component
 
     renderHighlight()
     {
+        if (this.state.content === null) {
+            return ""
+        }
+
         return this.state.content.substring(0, this.state.highlightIndex)
     }
 
     renderContent()
     {
+        if (this.state.content === null) {
+            return ""
+        }
+
         return this.state.content.substring(this.state.highlightIndex)
     }
 
