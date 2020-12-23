@@ -1,5 +1,4 @@
 .Prompter {
-    height: 60vw;
     overflow-y: scroll;
     scroll-behavior: smooth;
 }

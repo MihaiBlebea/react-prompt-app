@@ -12,6 +12,7 @@ export default class App extends React.Component
             highlightIntervalId: null,
             highlightSpeed: 1,
             highlightIndex: 0,
+            prompterHeight: 0,
             content: null
         }
     }
@@ -21,6 +22,8 @@ export default class App extends React.Component
         await this.handleContent()
 
         this.handleHighlight()
+
+        this.handleScreenHeight()
     }
 
     async handleContent()
@@ -29,6 +32,15 @@ export default class App extends React.Component
         this.setState({
             ...this.state,
             content: result.data
+        })
+    }
+
+    handleScreenHeight()
+    {
+        let h = window.screen.height - 100
+        this.setState({
+            ...this.state,
+            prompterHeight: h
         })
     }
 
@@ -147,8 +159,8 @@ export default class App extends React.Component
                         </div>
                     </div>
                 </div>
-                <div className="row justify-content-center">
-                    <div className="col-md-6 border border-success Prompter">
+                <div className="row justify-content-center" onClick={ this.handlePauseHighlight.bind(this) }>
+                    <div className="col-md-6 border border-success Prompter" style={{height: this.state.prompterHeight + 'px' }}>
                         <span className="Highlight">{ this.renderHighlight() }</span>{ this.renderContent() }
                     </div>
                 </div>
