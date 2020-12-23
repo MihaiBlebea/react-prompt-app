@@ -1,6 +1,7 @@
 import React from 'react'
 import './App.css'
 import axios from 'axios'
+import NoSleep from 'nosleep.js'
 
 export default class App extends React.Component
 {    
@@ -37,11 +38,17 @@ export default class App extends React.Component
 
     handleScreenHeight()
     {
-        let h = window.screen.height - 100
+        let h = window.screen.height / 1.5
         this.setState({
             ...this.state,
             prompterHeight: h
         })
+    }
+
+    handleScreenLock()
+    {
+        let noSleep = new NoSleep()
+        noSleep.enable()
     }
 
     handleScroll()
@@ -50,7 +57,7 @@ export default class App extends React.Component
 
         let intervalId = setInterval(()=> {
             prompt.scrollTop += 1
-        }, 200)
+        }, 100)
 
         this.setState({
             ...this.state,
@@ -117,7 +124,6 @@ export default class App extends React.Component
         }
 
         let factor = 0.1
-    
         this.setState({
             ...this.state,
             highlightSpeed: parseFloat((this.state.highlightSpeed - factor).toFixed(2))
@@ -149,19 +155,20 @@ export default class App extends React.Component
                 <div className="row justify-content-center mb-3">
                     <div className="col-md-6 d-flex justify-content-between">
                         <div>
-                            <button className="btn btn-outline-primary" onClick={ this.handlePauseScroll.bind(this) }>Scroll</button>
-                            <button className="btn btn-outline-primary" onClick={ this.handlePauseHighlight.bind(this) }>Highlight</button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={ this.handlePauseScroll.bind(this) }>Scroll</button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={ this.handlePauseHighlight.bind(this) }>Highlight</button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={ this.handleScreenLock.bind(this) }>NoSleep</button>
                         </div>
                         <div className="d-flex align-items-center">
-                            <button className="btn btn-outline-primary" onClick={ this.handleHighlightSpeedIncrease.bind(this) }>+</button>
-                            <div className="px-4">{ this.state.highlightSpeed }</div>
-                            <button className="btn btn-outline-primary" onClick={ this.handleHighlightSpeedDecrease.bind(this) }>-</button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={ this.handleHighlightSpeedIncrease.bind(this) }>+</button>
+                            <div className="px-2">{ this.state.highlightSpeed }</div>
+                            <button className="btn btn-sm btn-outline-primary" onClick={ this.handleHighlightSpeedDecrease.bind(this) }>-</button>
                         </div>
                     </div>
                 </div>
                 <div className="row justify-content-center" onClick={ this.handlePauseHighlight.bind(this) }>
                     <div className="col-md-6 border border-success Prompter" style={{height: this.state.prompterHeight + 'px' }}>
-                        <span className="Highlight">{ this.renderHighlight() }</span>{ this.renderContent() }
+                        <span className="Highlight">{ this.renderHighlight() }</span><span id="cursor"></span>{ this.renderContent() }
                     </div>
                 </div>
             </div>
